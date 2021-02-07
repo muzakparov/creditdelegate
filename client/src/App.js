@@ -52,6 +52,7 @@ class App extends Component {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
+    
     return (
       <div className="App">
         <h1>Good to Go!</h1>
