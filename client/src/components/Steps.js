@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,11 +36,16 @@ function getStepContent(step) {
   }
 }
 
-export default function HorizontalLinearStepper({instanceCred,accounts}) {
+export default function HorizontalLinearStepper({
+  instanceCred,
+  accounts,
+  contract,
+}) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
+  const [amount, setamount] = useState("");
 
   const isStepOptional = (step) => {
     return step === 0;
@@ -83,6 +89,11 @@ export default function HorizontalLinearStepper({instanceCred,accounts}) {
     setActiveStep(0);
   };
 
+  const handleDeposit = async () => {
+    // await contract.methods.set(5).send({ from: accounts[0] });
+    await instanceCred.methods.depositCollateral("0xaFF4481D10270F50f203E0763e2597776068CBc5",amount).send({ from: accounts[0] });
+  };
+
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
@@ -104,9 +115,115 @@ export default function HorizontalLinearStepper({instanceCred,accounts}) {
           );
         })}
       </Stepper>
+      {activeStep === 0 && (
+        <div>
+          <div
+            style={{
+              // margin: "auto",
+              // textAlign: "center",
+              padding: "40px 10px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ marginRight: 10, verticalAlign: "middle" }}>
+              DAI:{" "}
+            </div>
+            <div>
+              <input
+                type="text"
+                name="amount"
+                id="amount"
+                placeholder="amount"
+                style={{ height: 20 }}
+                value={amount}
+                onChange={(e) => {
+                  setamount(parseInt(e.target.value));
+                }}
+              />
+            </div>
+          </div>
+          <div style={{ textAlign: "center", marginBottom: 40 }}>
+            <Button
+              onClick={handleDeposit}
+              variant="contained"
+              color="secondary"
+            >
+              Deposit
+            </Button>
+          </div>
+        </div>
+      )}
+
+{activeStep === 1 && (
+        <div>
+          <div
+            style={{
+              // margin: "auto",
+              // textAlign: "center",
+              padding: "40px 10px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ marginRight: 10, verticalAlign: "middle" }}>
+              DAI:{" "}
+            </div>
+            <div>
+              <input
+                type="text"
+                name="amount"
+                id="amount"
+                placeholder="amount"
+                style={{ height: 20 }}
+                value={amount}
+                onChange={(e) => {
+                  setamount(parseInt(e.target.value));
+                }}
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              // margin: "auto",
+              // textAlign: "center",
+              padding: "40px 10px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ marginRight: 10, verticalAlign: "middle" }}>
+              Delegate To:{" "}
+            </div>
+            <div>
+              <input
+                type="text"
+                name="address"
+                id="address"
+                placeholder="address"
+                style={{ height: 20 }}
+                value={amount}
+                onChange={(e) => {
+                  setamount(parseInt(e.target.value));
+                }}
+              />
+            </div>
+          </div>
+          <div style={{ textAlign: "center", marginBottom: 40 }}>
+            <Button
+              onClick={handleDeposit}
+              variant="contained"
+              color="secondary"
+            >
+              Delegate Credit
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div>
         {activeStep === steps.length ? (
-          <div style={{margin:'auto'}}>
+          <div style={{ margin: "auto" }}>
             <Typography className={classes.instructions}>
               You have successfully delegated credit!
             </Typography>
@@ -116,7 +233,7 @@ export default function HorizontalLinearStepper({instanceCred,accounts}) {
           </div>
         ) : (
           <div>
-            <div style={{ margin: "auto",textAlign:'center' }}>
+            <div style={{ margin: "auto", textAlign: "center" }}>
               {isStepOptional(activeStep) && (
                 <Button
                   variant="contained"
