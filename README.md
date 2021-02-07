@@ -2,6 +2,12 @@
 
 I wasn't able to find a User Interface to delegate credit, so built this prototype that provides an ability to delegate credit through UI. User needs to deposit a supported asset and then delegate credit to specific address. 
 
+![Deposit Page](./screenshot.png "First page")
+
+
+![Delegate credit](./screenshot_second.png "Second page")
+
+
 ## Quick Start
 
 1. Clone this repository 
